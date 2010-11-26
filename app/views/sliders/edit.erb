@@ -1,0 +1,94 @@
+
+<% form_for @slider do |f| %>
+  <div class="widget-header">
+    <%= f.error_messages %>
+    <input name="_method" type="hidden" value="put" />
+    <table class="page-head">
+      <tr>
+        <td style="width:130px;">
+          <label>TOKEN:</label>
+          <input type="text" value="[#slider:<%=@slider.id%>]" style="width:80px;" READONLY/>
+        </td>
+        <td style="width:150px;">
+          <%= f.label :name %> <span class="star_req">*</span>
+          <%= f.text_field :name,  {:style => 'width:150px', :rel => 'text_req', :style => 'width:120px' } %>
+        </td>
+        <td style="width:130px;">
+          <%= f.label :width %> <span class="star_req">*</span>
+          <%= f.text_field :width, {:style => 'width:30px', :rel => 'text_req' } %>px
+        </td>
+        
+        <td style="width:130px;">
+          <%= f.label :height %> <span class="star_req">*</span>
+          <%= f.text_field :height,  {:style => 'width:30px', :rel => 'text_req' } %>px
+        </td>
+        
+        <td class="buttons" style="width:60px;">
+          <%= link_to 'delete', slider_path(@slider), :class => 'delete negative', :rel => 'sliders' %>
+        </td>
+                 
+        <td class="buttons" style="width:120px;">
+          <button type="submit" class="positive" id="save-slider">Save Slideshow</button>
+        </td>
+      </tr>
+    </table>
+
+    <ul id="widget-tabs">
+      <li title="View sample slideshow output"><a href="#" rel="tab-widget-view" id="reload-widget-iframe">Slideshow Preview</a></li>
+      <li title="Create and edit slides here"><a href="#slides" rel="tab-widget-slides">Edit Slides</a></li>
+      <li title="Edit CSS here"><a href="#css" rel="tab-widget-css">Slideshow CSS</a></li>
+      <li title="The Basic HTML stucture of your slideshow (READONLY)"><a href="#html" rel="tab-widget-html">(Sample Rendered Code)</a></li>    
+    </ul>
+  
+  </div>
+
+  <div id="tab-widget-view" class="widget-tabs">
+    <div class="notes">
+      View the up-to-date rendered slideshow. Edit slides via the <b>"Slides"</b> tab.
+    </div>
+    <div id="widget-view-container" rel="<%= @slider.id %>">&#160;</div>
+  </div>
+
+  <div id="tab-widget-slides" class="widget-tabs">
+    <div class="notes">
+      Create and delete slides, then drag slides to arrange their order.
+      Edit slide content with the HTML editor.
+      <br/>Changes are only saved when hitting <b>CTRL + S</b> while in a code editor or <b>"Save Slideshow"</b>.
+    </div>
+    
+    <div style="float:right;width:550px;">
+      <textarea id="slide-editor" style="width:100%;height:300px"></textarea>
+    </div style="float:left;width:350px;">
+    <div>
+      <a href="#" id="new-slide" style="clear:both;">New Slide</a>
+      <ul id="slides-list">
+        <% @slider.slides.each_with_index do |content, index| %>
+          <li title="Click to edit or drag to reorder">
+            Slide <%= index %>
+            <a href="#" class="remove">[x]</a>
+            <textarea id="slider_slides_<%= index %>" name="slider_slides[<%= index %>]" style="display:none"><%= content %></textarea>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
+    
+  <div id="tab-widget-css" class="widget-tabs">
+    <div class="notes">
+      Add custom CSS styling to your slideshow. Study the HTML output tab to find ids, classes and tags to style. 
+      <br/>Note that much of CSS3 is not allowed in facebook but will work in your preview.
+      If your code is not working, the CSS is probably invalid.
+    </div>  
+    <%= f.text_area :css, :style => 'width:99%;height:300px;' %>
+  </div>
+
+  <div id="tab-widget-html" class="widget-tabs">
+    <div class="notes">
+      Rendered HTML output for your slideshow. Allows you to see how the slideshow is structured.
+      Note this gets updated only once on initial slideshow load.
+    </div>
+    <textarea id="sample-html"><%= @html %></textarea>
+  </div>  
+<% end %> 
+  
+

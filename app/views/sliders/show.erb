@@ -1,0 +1,105 @@
+<% if @standalone %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <title>Slideshow Preview</title>
+  <%= javascript_include_tag "jquery-1.4.2.min"%>
+  <style type="text/css">
+    /* default fb style */
+    body{color: #333333; font-family: "lucida grande", tahoma, verdana, arial, sans-serif;  }
+    a {color:#3b5998}
+
+  </style>
+</head>
+<body>
+<small style="color:#555; display:block;text-align:center;">*The dotted line is the max width of the Facebook tab. Only shows in preview mode.*</small>
+<div style="width: 760px; margin:auto; border:1px dashed #ccc;overflow:hidden;">
+<% end %>
+
+<style type="text/css" id="slide-widget"><%= @slider.css.gsub("\n", '') %></style>
+<style type="text/css">
+#slideshow-wrapper{width:<%= @slider.width %>px;}
+#gallery-wrapper, #gallery, #gallery div.each-slide {width:<%= @slider.width %>px; height:<%= @slider.height %>px !important;}
+#gallery-wrapper{overflow:hidden !important;}
+#gallery{position: relative; left: 0px; overflow:hidden !important;}
+#gallery div.each-slide {float:left !important; }
+</style>
+
+<div id="slideshow-wrapper">
+  <div id="gallery-wrapper">
+    <div id="gallery" onclick="return false;" title="1">
+      <% @slider.slides.each_with_index do |content, index| %>
+        <div id="slide-<%= index+1 %>" class="each-slide"><span class="slide-container"><%=raw Sanitize.clean(content, Sanitize::Config::CUSTOM) %></span></div>
+      <% end %>
+    </div>
+  </div>
+  <div id="buttons">
+    <a href="#" id="back-link" onclick="apoa.scroll('back'); return false;">&lt;</a> 
+    <a href="#" id="next-link" onclick="apoa.scroll('next'); return false;">&gt;</a> 
+  </div>
+  <div id="reset">
+    <a href="#" id="reset-link" onclick="apoa.reset(); return false;">Reset</a>
+  </div>
+</div>
+
+<% if @to_facebook %>
+ <script>
+  <!--
+  function slideshow($Gallery, slideCount, slideWidth){
+    this.scroll = function(action){
+      var curSlide = Gallery.getTitle();
+      if (curSlide <= 1 && action == 'back'){return false;}
+      if (curSlide >= slideCount && action == 'next'){return false;}
+      Animation(Gallery).by('left', ((action == 'next') ? '-' : '') + slideWidth + 'px').go(); 
+      Gallery.setTitle( ((action == 'next') ? ++curSlide : --curSlide) );
+      return false;
+    }
+    this.reset = function(){
+      Animation(Gallery).to('left', '0px').go();
+      Gallery.setTitle(1);
+      return false;
+    } 
+  }
+  Gallery = document.getElementById('gallery');
+  slideCount = Gallery.getChildNodes().length ;
+  slideWidth = <%= @slider.width %>;
+  Gallery.setStyle({width: (slideCount*slideWidth) + 'px'});
+  apoa = new slideshow(Gallery, slideCount, slideWidth);
+  -->
+ </script>
+<% else %>
+ <script type="text/javascript">
+  /* preview mode using jquery */ 
+  function slideshow($Gallery, slideCount, slideWidth){
+    this.scroll = function(action){
+      var curSlide = $Gallery.attr('title');
+      if (curSlide <= 1 && action == 'back'){return false;}
+      if (curSlide >= slideCount && action == 'next'){return false;}
+      $Gallery.animate({left: ((action == 'next') ? '-=' : '+=') + slideWidth}, 'fast');
+      $Gallery.attr('title', ((action == 'next') ? ++curSlide : --curSlide) );
+      return false;
+    }
+    this.reset = function(){
+      $Gallery.animate({left: 0}, 'fast');
+      $Gallery.attr('title', 1);
+      return false;
+    } 
+  }
+
+  $(function(){
+    $Gallery = $('#gallery');
+    slideCount = $Gallery.children('div').length ;
+    slideWidth = <%= @slider.width %>;
+    $Gallery.css({width: (slideCount*slideWidth) + 'px'});
+    apoa = new slideshow($Gallery, slideCount, slideWidth);
+  })
+ </script>
+<% end %>
+
+
+<% if @standalone %>
+</div>
+</body>
+</html>
+<% end %>

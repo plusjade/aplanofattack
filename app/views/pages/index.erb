@@ -1,0 +1,32 @@
+
+<h3>My Pages</h3>
+<div style="height:110px;padding:10px; margin-bottom:10px; overflow:auto;">
+  <ul id="pages-list">
+  <% @user.pages.each do |page| %>
+    <li>
+      <%= link_to page.name, edit_page_path(page), :class => 'edit' %>
+    </li>
+  <% end %>
+  </ul>
+</div>
+
+<% form_for(@user.pages.build) do |f| %>
+  <%= f.error_messages %>
+  <h3>Create New Page</h3>
+  
+  <fieldset class="buttons">
+     <button type="submit" class="positive" tabindex="1" accesskey="enter" style="float:right">Add New Page</button>
+  
+    <%= f.label :name %> <span class="star_req">*</span>
+     <%= f.text_field :name, :rel => 'text_req', :tabindex => 1 %>
+  
+  </fieldset>    
+
+<% end %>
+
+<style type="text/css">
+  form#new_page{ width:450px; margin:auto;}
+  form#new_page h3{text-align:center;}
+  form#new_page input{font-size:16px; font-weight:bold; width:250px;}
+  form#new_page label{font-size:16px; font-weight:bold; color:#111;}
+</style>

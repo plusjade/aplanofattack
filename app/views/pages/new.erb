@@ -1,0 +1,27 @@
+
+
+<% form_for(@page) do |f| %>
+  <%= f.error_messages %>
+  
+  <div class="right-half">
+    Info
+  </div>
+  
+  <div class="left-half">
+    <h5>Create a New Page</h5>
+    <fieldset>
+      <%= f.label :name %> <span class="star_req">*</span>
+      <br /><%= f.text_field :name, :rel => 'text_req' %>
+    </fieldset>    
+
+    <fieldset>
+      <%= f.label 'Facebook Page or Profile ID' %> <span class="star_req">*</span>
+      <br /><%= f.text_field :fb_sig_page_id, :rel => 'text_req' %>
+    </fieldset> 
+    
+    <fieldset class="buttons">
+      <button type="submit" class="positive">Add New Page</button>
+    </fieldset>
+
+  </div>
+<% end %>
